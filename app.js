@@ -16,7 +16,6 @@ const formatAMPM = ShopTime => {
 }
 const check = (currDayObj, today, currTime, dayNames) => {
     if(!currDayObj.day === dayNames[today]) {
-        console.log('check day', currDayObj.day + ' ' + dayNames[today]);
         return false;
     }
 
@@ -24,18 +23,13 @@ const check = (currDayObj, today, currTime, dayNames) => {
     const shopCloseTime = formatAMPM(currDayObj.close);
 
     if(!(currTime.hour >= shopOpenTime.hour && currTime.hour <= shopCloseTime.hour)) {
-        console.log('check hour', currTime.hour + ' ' + shopOpenTime + ' ' + shopCloseTime.hour);
         return false;
     }
-    if(currTime.hour === shopOpenTime.hour) {
-        if(currTime.minute < shopOpenTime.minute) {
-            return false;
-        }
+    if(currTime.hour === shopOpenTime.hour && currTime.minute < shopOpenTime.minute) {
+        return false;
     }
-    if(currTime.hour === shopCloseTime.hour) {
-        if(currTime.minute > shopOpenTime.minute) {
-            return false;
-        }
+    if(currTime.hour === shopCloseTime.hour && currTime.minute > shopOpenTime.minute) {
+        return false;
     }
     
     return true;
