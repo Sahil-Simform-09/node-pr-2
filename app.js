@@ -16,20 +16,16 @@ const formatAMPM = ShopTime => {
 }
 const shopOpenOrClose = (shopOpenTime, shopCloseTime, eachDay, today, currTime) => {
     if(!(eachDay === today)) {
-        //console.log(eachDay, ' ', today);
         return false;
     }
 
     if(!(currTime.hour >= shopOpenTime.hour && currTime.hour <= shopCloseTime.hour)) {
-        //console.log('check hour', currTime.hour + ' ' + shopOpenTime.hour + ' ' + shopCloseTime.hour);
         return false;
     }
     if(currTime.hour === shopOpenTime.hour && currTime.minute < shopOpenTime.minute) {
-        //console.log('minute');
         return false;
     }
     if(currTime.hour === shopCloseTime.hour && currTime.minute > shopOpenTime.minute) {
-        //console.log('minute');
         return false;
     }
     
@@ -38,6 +34,8 @@ const shopOpenOrClose = (shopOpenTime, shopCloseTime, eachDay, today, currTime) 
 const createTempDays = (days, dayNames) => {
     const tempDays = [];
     let i = 0, j = 0;
+    
+    // create array for all 7 days, contains for particular day shop will be open or close
     while(i < days.length && j < dayNames.length) {
         if(days[i].day === dayNames[j]) {
             tempDays[j] = {
@@ -62,13 +60,12 @@ const createTempDays = (days, dayNames) => {
     }
     return tempDays;
 }
-const countRemainHours = (i, tempDays, days, flag, remainHours, today, currTime) => {
+const countRemainHours = (i, tempDays, days, flag, remainHours) => {
     while(i < tempDays.length) {
-        console.log(remainHours);
-        if(tempDays[i].isLeave) {
+        if(tempDays[i].isLeave) { // the day when shop will not open
             remainHours += 24;
             i++;
-        } else { 
+        } else { // the day when shop will be opem
             flag = true;
             const shopOpenDay = days.find( aDay => {
                 return aDay.day === tempDays[i].day;
@@ -88,9 +85,8 @@ const whenShopOpen = (currTime, today, days, dayNames, shopStatus) => {
         return aDay.day === today;
     });
 
-    let i = index,remainHours = 0, flag = false;
-    remainHours = 24 - currTime.hour; 
-    i++; 
+    let i = index + 1, remainHours = 0, flag = false;
+    remainHours = 24 - currTime.hour; // remainHour for today
 
     const remainHoursObj = countRemainHours(i, tempDays, days, flag, remainHours, today, currTime);
     remainHours = remainHoursObj.remainHours;
@@ -125,13 +121,14 @@ const startApp = () => {
         shopStatus = shopOpenOrClose(shopOpenTime, shopCloseTime, eachDayObj.day, dayNames[today], currTime);
         if(shopStatus) {
             const remainCloseTime = whenShopClose(currTime, shopCloseTime);
-            messsage = `Open, The shop will be closed within ${remainCloseTime} Hrs`
+            messsage = `Open, The shop will be closed within ${remainCloseTime} Hrs`;
             return messsage;
         }
     }
 
 
     const remainOpenTime = whenShopOpen(currTime, dayNames[today], days, dayNames, shopStatus);
-    return remainOpenTime;
+    messsage = `Closed. The shop will be open ${remainOpenTime} Hrs`;
+    return messsage;
 }
 console.log(startApp());
