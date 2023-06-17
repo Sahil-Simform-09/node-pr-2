@@ -14,7 +14,7 @@ const formatAMPM = ShopTime => {
 
     return {hour, minute};
 }
-const check = (currDayObj, today, currTime, dayNames) => {
+const shopOpenOrClose = (currDayObj, today, currTime, dayNames) => {
     if(!currDayObj.day === dayNames[today]) {
         return false;
     }
@@ -48,7 +48,7 @@ const startApp = () => {
 
     let status = false;
     days.forEach( currDayObj => {
-        status = check(currDayObj, today, currTime, dayNames);
+        status = shopOpenOrClose(currDayObj, today, currTime, dayNames);
         if(status) {
             return;
         }
