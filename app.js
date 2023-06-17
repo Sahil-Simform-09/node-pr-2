@@ -35,7 +35,7 @@ const check = (currDayObj, today, currTime, dayNames) => {
     return true;
 }
 const startApp = () => {
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Thu', 'Fri', 'Sat'];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat'];
     const buffer =  fs.readFileSync('scedule.json');
     const days = JSON.parse(buffer);
 
