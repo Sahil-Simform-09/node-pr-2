@@ -128,7 +128,15 @@ const startApp = () => {
 
 
     const remainOpenTime = whenShopOpen(currTime, dayNames[today], days, dayNames, shopStatus);
-    messsage = `Closed. The shop will be open ${remainOpenTime} Hrs`;
+    let remainDay = remainOpenTime / 24;
+    let remainHour = remainOpenTime % 24;
+    if(remainDay <= 0) {
+        messsage = `Shop is Currently Closed. and it will be open after ${remainHour} Hrs`
+    } else {
+        remainDay = Math.floor(remainDay);
+        const dayOrDays = remainDay > 1 ? 'Days' : 'Day';
+        messsage = `Shop is Currently Closed. and it will be open after ${remainDay} ` + dayOrDays + ` ${remainHour} Hrs`;
+    }
     return messsage;
 }
 console.log(startApp());
